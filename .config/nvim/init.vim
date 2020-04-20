@@ -25,6 +25,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
     \ 'coc-eslint',
     \ 'coc-prettier',
     \ 'coc-json',
+    \ 'coc-yaml',
     \ ]
   set hidden
   set updatetime=300
@@ -73,6 +74,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
     endif
   endfunction
 " }}}
+
+" SLS code formatting
+Plug 'saltstack/salt-vim'
 
 " Atom One Dark theme.
 Plug 'joshdick/onedark.vim'
