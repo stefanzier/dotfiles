@@ -18,60 +18,60 @@ call plug#begin('~/.config/nvim/plugged')
 " Intellisense Engine
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " {{{
-let g:coc_global_extensions = [
-  \ 'coc-snippets',
-  \ 'coc-pairs',
-  \ 'coc-tsserver',
-  \ 'coc-eslint',
-  \ 'coc-prettier',
-  \ 'coc-json',
-  \ ]
-set hidden
-set updatetime=300
-set shortmess+=c
-set signcolumn=yes
+  let g:coc_global_extensions = [
+    \ 'coc-snippets',
+    \ 'coc-pairs',
+    \ 'coc-tsserver',
+    \ 'coc-eslint',
+    \ 'coc-prettier',
+    \ 'coc-json',
+    \ ]
+  set hidden
+  set updatetime=300
+  set shortmess+=c
+  set signcolumn=yes
 
-" Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  " Use tab for trigger completion with characters ahead and navigate.
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+  " Use <c-space> to trigger completion.
+  inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+  " Coc only does snippet and additional edit on confirm.
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  " Or use `complete_info` if your vim support it, like:
+  " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Use `[g` and `]g` to navigate diagnostics
-" nmap <silent> [g <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]g <Plug>(coc-diagnostic-next)
+  " Use `[g` and `]g` to navigate diagnostics
+  " nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  " nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+  " Remap keys for gotos
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+  " Use K to show documentation in preview window
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
 " }}}
 
 " Atom One Dark theme.
@@ -119,28 +119,30 @@ Plug 'sheerun/vim-polyglot'
 " Distraction free writing by removing UI elements and centering everything.
 Plug 'junegunn/goyo.vim'
 " {{{
-let g:goyo_width = 120
+  let g:goyo_width = 120
+
+  " Open Goyo using leader+z
+  nnoremap <silent> <expr> <leader>z (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Goyo<cr>"
 " }}}
 
 " NERDTree - file system explorer
 Plug 'preservim/nerdtree'
 " {{{
-" Make NERDTree look a little nicer
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
+  " Make NERDTree look a little nicer
+  let NERDTreeMinimalUI = 1
+  let NERDTreeDirArrows = 1
 
-" Delete the buffer of the file just deleted with NERDTree
-let NERDTreeAutoDeleteBuffer = 1
+  " Delete the buffer of the file just deleted with NERDTree
+  let NERDTreeAutoDeleteBuffer = 1
 
-" Hide specific files/directories
-let NERDTreeIgnore = ['\.pyc$', '__pycache__', '__pycache__']
+  " Hide specific files/directories
+  let NERDTreeIgnore = ['\.pyc$', '__pycache__', '__pycache__']
 
-" Toggle NERDTree with CTRL+n
-map <C-n> :NERDTreeToggle<CR>
+  " Toggle NERDTree with CTRL+n
+  map <C-n> :NERDTreeToggle<CR>
 
-" Find current file in NERDTree window
-map <leader>e :NERDTreeFind<cr>
-
+  " Find current file in NERDTree window
+  map <leader>e :NERDTreeFind<cr>
 " }}}
 
 " For NERDTree - shows git status flags
@@ -155,6 +157,7 @@ Plug 'junegunn/fzf.vim'
   nnoremap <silent> <expr> <leader><leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":GFiles --cached --others --exclude-standard<cr>"
   nnoremap <silent> <expr> <leader>a (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Buffers<cr>"
   nnoremap <silent> <expr> <leader>A (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Windows<cr>"
+  nnoremap <silent> <expr> <leader>f (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Ag<cr>"
   nnoremap <silent> <leader>? :History<CR>
   nnoremap <silent> <leader>gl :Commits<CR>
   nnoremap <silent> <leader>ga :BCommits<CR>
