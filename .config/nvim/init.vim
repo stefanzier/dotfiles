@@ -1,4 +1,4 @@
-" Mad the leader key to Space
+" Make the leader key Space
 let g:mapleader = "\<Space>"
 
 " Autoinstall vim-plug
@@ -21,7 +21,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pairs',
-  \ 'coc-python',
   \ 'coc-tsserver',
   \ 'coc-eslint',
   \ 'coc-prettier',
@@ -54,8 +53,8 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" nmap <silent> [g <Plug>(coc-diagnostic-prev)
+" nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -133,11 +132,14 @@ let NERDTreeDirArrows = 1
 " Delete the buffer of the file just deleted with NERDTree
 let NERDTreeAutoDeleteBuffer = 1
 
+" Hide specific files/directories
+let NERDTreeIgnore = ['\.pyc$', '__pycache__', '__pycache__']
+
 " Toggle NERDTree with CTRL+n
 map <C-n> :NERDTreeToggle<CR>
 
 " Find current file in NERDTree window
-map <leader>r :NERDTreeFind<cr>
+map <leader>e :NERDTreeFind<cr>
 
 " }}}
 
@@ -166,6 +168,8 @@ Plug 'junegunn/fzf.vim'
   \ 'ctrl-v': 'vsplit',
   \ 'ctrl-y': {lines -> setreg('*', join(lines, "\n"))}}
 " }}}
+
+Plug 'davidhalter/jedi-vim'
 
 call plug#end()
 
@@ -221,7 +225,7 @@ set backspace=indent,eol,start
 set backupdir=/tmp//,.
 set clipboard=unnamedplus
 set complete+=kspell
-set completeopt=menuone,longest
+" set completeopt=menuone,longest
 set cursorline
 set directory=/tmp//,.
 set encoding=utf-8
@@ -332,4 +336,3 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 
 " Close vim if the only window left is NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
