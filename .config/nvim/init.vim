@@ -32,30 +32,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
   set shortmess+=c
   set signcolumn=yes
 
-  " Use tab for trigger completion with characters ahead and navigate.
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
   " Use <c-space> to trigger completion.
   inoremap <silent><expr> <c-space> coc#refresh()
-
-  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-  " Coc only does snippet and additional edit on confirm.
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-  " Or use `complete_info` if your vim support it, like:
-  " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-  " Use `[g` and `]g` to navigate diagnostics
-  " nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  " nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
   " Remap keys for gotos
   nmap <silent> gd <Plug>(coc-definition)
@@ -78,17 +56,11 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " SLS code formatting
 Plug 'saltstack/salt-vim'
 
-" Atom One Dark theme.
-Plug 'joshdick/onedark.vim'
-
 " Shades of Purple theme (similar to VSCode)
 Plug 'Rigellute/shades-of-purple.vim'
 
 "Pass focus events from tmux to Vim (useful for autoread and linting tools).
 Plug 'tmux-plugins/vim-tmux-focus-events'
-
-" Helpers for moving and manipulating files / directories.
-Plug 'tpope/vim-eunuch'
 
 " Briefly highlight which text was yanked.
 Plug 'machakann/vim-highlightedyank'
@@ -149,9 +121,6 @@ Plug 'preservim/nerdtree'
   map <leader>e :NERDTreeFind<cr>
 " }}}
 
-" For NERDTree - shows git status flags
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
 " A general purpose fuzzy file finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -163,8 +132,6 @@ Plug 'junegunn/fzf.vim'
   nnoremap <silent> <expr> <leader>A (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Windows<cr>"
   nnoremap <silent> <expr> <leader>f (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Ag<cr>"
   nnoremap <silent> <leader>? :History<CR>
-  nnoremap <silent> <leader>gl :Commits<CR>
-  nnoremap <silent> <leader>ga :BCommits<CR>
 
   imap <C-x><C-f> <plug>(fzf-complete-file-ag)
   imap <C-x><C-l> <plug>(fzf-complete-line)
@@ -199,28 +166,10 @@ syntax on
 " Set the color scheme.
 colorscheme shades_of_purple
 
-" Set the color scheme to dark.
-set background=dark
-
-
 " -----------------------------------------------------------------------------
 " Status line
 " -----------------------------------------------------------------------------
-
-" Heavily inspired by: https://github.com/junegunn/dotfiles/blob/master/vimrc
-function! s:statusline_expr()
-  let mod = "%{&modified ? '[+] ' : !&modifiable ? '[x] ' : ''}"
-  let ro  = "%{&readonly ? '[RO] ' : ''}"
-  let ft  = "%{len(&filetype) ? '['.&filetype.'] ' : ''}"
-  let fug = "%{exists('g:loaded_fugitive') ? fugitive#statusline() : ''}"
-  let sep = ' %= '
-  let pos = ' %-12(%l : %c%V%) '
-  let pct = ' %P'
-
-  return '[%n] %f %<'.mod.ro.ft.fug.sep.pos.'%*'.pct
-endfunction
-
-let &statusline = s:statusline_expr()
+set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}
 
 " -----------------------------------------------------------------------------
 " Basic Settings
@@ -254,7 +203,7 @@ set noshiftround
 set nospell
 set nostartofline
 set number relativenumber
-set regexpengine=1
+" set regexpengine=1
 set ruler
 set scrolloff=3
 set shiftwidth=2
@@ -278,6 +227,10 @@ set whichwrap=b,s,<,>
 set wildmenu
 set wildmode=full
 set wrap
+
+" https://vi.stackexchange.com/questions/5128/matchpairs-makes-vim-slow
+let g:matchparen_timeout = 2
+let g:matchparen_insert_timeout = 2
 
 " -----------------------------------------------------------------------------
 " Basic mappings
