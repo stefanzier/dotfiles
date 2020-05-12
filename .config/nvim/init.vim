@@ -59,6 +59,9 @@ Plug 'saltstack/salt-vim'
 " Shades of Purple theme (similar to VSCode)
 Plug 'Rigellute/shades-of-purple.vim'
 
+" Gruvbox theme
+Plug 'morhetz/gruvbox'
+
 "Pass focus events from tmux to Vim (useful for autoread and linting tools).
 Plug 'tmux-plugins/vim-tmux-focus-events'
 
@@ -95,7 +98,7 @@ Plug 'sheerun/vim-polyglot'
 " Distraction free writing by removing UI elements and centering everything.
 Plug 'junegunn/goyo.vim'
 " {{{
-  let g:goyo_width = 120
+  let g:goyo_width = 160
 
   " Open Goyo using leader+z
   nnoremap <silent> <expr> <leader>z (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Goyo<cr>"
@@ -143,7 +146,11 @@ Plug 'junegunn/fzf.vim'
   \ 'ctrl-y': {lines -> setreg('*', join(lines, "\n"))}}
 " }}}
 
+" Provides great python auto-completion
 Plug 'davidhalter/jedi-vim'
+
+" A simple scratchpad
+Plug 'mtth/scratch.vim'
 
 call plug#end()
 
@@ -164,7 +171,7 @@ endif
 syntax on
 
 " Set the color scheme.
-colorscheme shades_of_purple
+autocmd vimenter * colorscheme gruvbox
 
 " -----------------------------------------------------------------------------
 " Status line
