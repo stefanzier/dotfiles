@@ -104,26 +104,6 @@ Plug 'junegunn/goyo.vim'
   nnoremap <silent> <expr> <leader>z (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Goyo<cr>"
 " }}}
 
-" NERDTree - file system explorer
-Plug 'preservim/nerdtree'
-" {{{
-  " Make NERDTree look a little nicer
-  let NERDTreeMinimalUI = 1
-  let NERDTreeDirArrows = 1
-
-  " Delete the buffer of the file just deleted with NERDTree
-  let NERDTreeAutoDeleteBuffer = 1
-
-  " Hide specific files/directories
-  let NERDTreeIgnore = ['\.pyc$', '__pycache__', '__pycache__']
-
-  " Toggle NERDTree with CTRL+n
-  map <C-n> :NERDTreeToggle<CR>
-
-  " Find current file in NERDTree window
-  map <leader>e :NERDTreeFind<cr>
-" }}}
-
 " A general purpose fuzzy file finder
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -151,6 +131,12 @@ Plug 'davidhalter/jedi-vim'
 
 " A simple scratchpad
 Plug 'mtth/scratch.vim'
+
+" Lightweight enhancements to netrw
+Plug 'tpope/vim-vinegar'
+
+" Sublime-like multi-cursor movement
+Plug 'mg979/vim-visual-multi'
 
 call plug#end()
 
@@ -292,14 +278,3 @@ augroup CursorLine
     au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
     au WinLeave * setlocal nocursorline
 augroup END
-
-" Open NERDTree if no file was specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" Open NERDTree if only a directory was specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-
-" Close vim if the only window left is NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
