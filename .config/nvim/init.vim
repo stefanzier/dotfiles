@@ -80,6 +80,12 @@ Plug 'ntpeters/vim-better-whitespace'
 " Toggle comments in various ways.
 Plug 'tpope/vim-commentary'
 
+" Surround text with "'{...}'"
+Plug 'tpope/vim-surround'
+
+" Repeat plugin maps
+Plug 'tpope/vim-repeat'
+
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
 Plug 'tpope/vim-sleuth'
 
