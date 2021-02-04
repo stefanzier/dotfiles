@@ -15,6 +15,12 @@ endif
 " Specify a directory for plugins.
 call plug#begin('~/.config/nvim/plugged')
 
+" Provides great python auto-completion
+Plug 'davidhalter/jedi-vim'
+" {{{
+  let g:jedi#use_splits_not_buffers = "left"
+" }}}
+
 " Intellisense Engine
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " {{{
@@ -132,9 +138,6 @@ Plug 'junegunn/fzf.vim'
   \ 'ctrl-y': {lines -> setreg('*', join(lines, "\n"))}}
 " }}}
 
-" Provides great python auto-completion
-Plug 'davidhalter/jedi-vim'
-
 " A simple scratchpad
 Plug 'mtth/scratch.vim'
 
@@ -180,11 +183,12 @@ set backspace=indent,eol,start
 set backupdir=/tmp//,.
 set clipboard=unnamedplus
 set complete+=kspell
-" set completeopt=menuone,longest
 set cursorline
 set directory=/tmp//,.
 set encoding=utf-8
 set expandtab smarttab
+set foldmethod=indent
+set foldlevelstart=20
 set formatoptions=tcqrn1
 set guifont=Inconsolata\ Medium\ 12 linespace=0
 set hidden
@@ -258,6 +262,10 @@ vmap y ygv<Esc>
 
 " Source Vim config file.
 map <Leader>sv :source $MYVIMRC<CR>
+
+" Add closing tags when control+s is triggered in INSERT mode (e.g. 'div' -> '<div></div>')
+inoremap <buffer> <C-s> <esc>yiwi<lt><esc>ea></><esc>hpF>i
+
 
 " -----------------------------------------------------------------------------
 " Basic autocommands
