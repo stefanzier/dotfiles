@@ -9,6 +9,7 @@ end
 
 -------------------- MAPPINGS ------------------------------
 g.mapleader = " " -- Make the leader key Space
+map('n', '<leader>cf', '<cmd>let @*=fnamemodify(expand("%"), ":~:.")<cr>')
 
 -------------------- PLUGINS -------------------------------
 require('packer').startup(function()
