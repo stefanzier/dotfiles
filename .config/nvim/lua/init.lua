@@ -78,9 +78,9 @@ require'compe'.setup {
 -- telescope
 local actions = require "telescope.actions"
 local sorters = require "telescope.sorters"
-map('n', '<c-p>', "<cmd>Telescope find_files<cr>")
-map('n', '<leader>;', "<cmd>Telescope buffers<cr>")
-map('n', '<leader>fg', "<cmd>Telescope git_files<cr>")
+map('n', '<leader><leader>', "<cmd>Telescope find_files<cr>")
+map('n', '<leader>a', "<cmd>Telescope buffers<cr>")
+map('n', '<leader>fg', "<cmd>Telescope live_grep<cr>")
 map('n', '<leader>fc', "<cmd>Telescope commands<cr>")
 map('n', '<leader>fT', "<cmd>Telescope tags<cr>")
 map('n', '<leader>gB', "<cmd>Telescope git_branches<cr>")
