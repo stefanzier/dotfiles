@@ -8,9 +8,8 @@ local function map(mode, lhs, rhs, opts)
 end
 
 -------------------- MAPPINGS ------------------------------
-g.mapleader = " " -- Make the leader key Space
-map('n', '<leader>cf', '<cmd>let @*=fnamemodify(expand("%"), ":~:.")<cr>')
-
+g.mapleader = " "                                                           -- Make the leader key Space
+map('n', '<leader>cf', '<cmd>let @*=fnamemodify(expand("%"), ":~:.")<cr>')  -- copy relative file path to clipboard
 -------------------- PLUGINS -------------------------------
 require('packer').startup(function()
   use 'APZelos/blamer.nvim'
@@ -76,6 +75,8 @@ require'compe'.setup {
     vsnip         = false;
   };
 }
+map('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })     -- enable auto-import w/ nvim-compe
+map('i', '<c-space>', 'compe#complete()', { expr = true })     -- enable auto-import w/ nvim-compe
 -- telescope
 local actions = require "telescope.actions"
 local sorters = require "telescope.sorters"
@@ -149,6 +150,7 @@ require("telescope").setup {
         ["<M-q>"] = actions.send_to_qflist + actions.open_qflist,
         ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
         ["<C-c>"] = actions.close,
+        ["<Esc>"] = actions.close,
       },
       n = {
         ["<CR>"] = actions.select_default + actions.center,
@@ -167,7 +169,7 @@ require("telescope").setup {
         ["<C-b>"] = actions.move_to_top,
         ["<C-f>"] = actions.move_to_bottom,
         ["<C-c>"] = actions.close,
-        ["<Esc>"] = false,
+        ["<Esc>"] = actions.close,
       },
     },
     borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
@@ -185,6 +187,21 @@ require("telescope").setup {
         "--smart-case"
     },
   },
+  pickers = {
+    buffers = {
+      sort_lastused = true,
+      mappings = {
+        i = {
+          ["<C-d>"] = actions.delete_buffer,
+          ["<Esc>"] = actions.close,
+        },
+        n = {
+          ["<C-d>"] = actions.delete_buffer,
+          ["<Esc>"] = actions.close,
+        }
+      }
+    },
+  }
 }
 -- treesitter
 require'nvim-treesitter.configs'.setup {
