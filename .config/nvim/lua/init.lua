@@ -13,9 +13,11 @@ map('n', '<leader>cf', '<cmd>let @*=fnamemodify(expand("%"), ":~:.")<cr>')  -- c
 -------------------- PLUGINS -------------------------------
 require('packer').startup(function()
   use 'APZelos/blamer.nvim'
+  use 'davidgranstrom/nvim-markdown-preview'
   use 'famiu/nvim-reload'                                      -- reload nvim config completely
   use 'folke/which-key.nvim'                                   -- key bindings cheatsheet
   use 'hrsh7th/nvim-compe'                                     -- autocompletion for nvim
+  use 'kyazdani42/nvim-tree.lua'                               -- file explorer
   use 'mg979/vim-visual-multi'                                 -- sublime-like multi-cursor movement
   use 'morhetz/gruvbox'                                        -- gruvbox theme
   use { 'neovim/nvim-lspconfig',
@@ -29,6 +31,10 @@ require('packer').startup(function()
         },
       }                                                        -- fuzzy file finder
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' } -- syntax highlighting
+  use {                                                        -- jump around buffer(s) faster (like easymotion)
+    'phaazon/hop.nvim',
+    branch = 'v1', -- optional but strongly recommended
+  }
   use { 'sindrets/diffview.nvim', opt = true,
       cmd = { 'DiffviewOpen', 'DiffviewClose' }}               -- easy git diff viewing
   use 'tpope/vim-commentary'                                   -- toggle comments in various ways
@@ -44,6 +50,11 @@ end)
 -------------------- PLUGIN OPTIONS ----------------------
 -- APZelos/blamer.nvim
 g['blamer_enabled'] = 1
+-- kyazdani42/nvim-tree.lua
+g.nvim_tree_show_icons = { git = 0, folders = 0, files = 0, folder_arrows = 0 }
+map('n', '<leader>e', '<cmd>NvimTreeToggle<cr>')
+require('nvim-tree').setup()
+
 -- nvim-compe
 require'compe'.setup {
   enabled              = true;
@@ -77,6 +88,11 @@ require'compe'.setup {
 }
 map('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })     -- enable auto-import w/ nvim-compe
 map('i', '<c-space>', 'compe#complete()', { expr = true })     -- enable auto-import w/ nvim-compe
+-- phaazon/hop.nvim
+require("hop").setup()
+map("n", "<leader>h", "<cmd>lua require'hop'.hint_words()<cr>")
+map("v", "<leader>h", "<cmd>lua require'hop'.hint_words()<cr>")
+
 -- telescope
 local actions = require "telescope.actions"
 local sorters = require "telescope.sorters"
