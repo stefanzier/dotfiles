@@ -6,13 +6,15 @@ local function map(mode, lhs, rhs, opts)
   if opts then options = vim.tbl_extend('force', options, opts) end
   api.nvim_set_keymap(mode, lhs, rhs, options)
 end
-
 -------------------- MAPPINGS ------------------------------
 g.mapleader = " "                                                           -- Make the leader key Space
 map('n', '<leader>cf', '<cmd>let @*=fnamemodify(expand("%"), ":~:.")<cr>')  -- copy relative file path to clipboard
+map("n", "<leader>j", "<C-W><C-H>", { silent = true })                      -- move to left split
+map("n", "<leader>k", "<C-W><C-L>", { silent = true })                      -- move to right split
 -------------------- PLUGINS -------------------------------
 require('packer').startup(function()
   use 'APZelos/blamer.nvim'
+  use 'beauwilliams/focus.nvim'                                -- maximizes active split
   use 'davidgranstrom/nvim-markdown-preview'
   use 'famiu/nvim-reload'                                      -- reload nvim config completely
   use 'folke/which-key.nvim'                                   -- key bindings cheatsheet
@@ -50,10 +52,14 @@ end)
 -------------------- PLUGIN OPTIONS ----------------------
 -- APZelos/blamer.nvim
 g['blamer_enabled'] = 1
+
+-- beauwilliams/focus.nvim
+require("focus").setup()
+
 -- kyazdani42/nvim-tree.lua
 g.nvim_tree_show_icons = { git = 0, folders = 0, files = 0, folder_arrows = 0 }
-map('n', '<leader>e', '<cmd>NvimTreeToggle<cr>')
-require('nvim-tree').setup()
+map('n', '<leader>n', '<cmd>NvimTreeFindFileToggle<cr>')
+require'nvim-tree'.setup {}
 
 -- nvim-compe
 require'compe'.setup {
@@ -88,6 +94,7 @@ require'compe'.setup {
 }
 map('i', '<cr>', 'compe#confirm("<cr>")', { expr = true })     -- enable auto-import w/ nvim-compe
 map('i', '<c-space>', 'compe#complete()', { expr = true })     -- enable auto-import w/ nvim-compe
+
 -- phaazon/hop.nvim
 require("hop").setup()
 map("n", "<leader>h", "<cmd>lua require'hop'.hint_words()<cr>")
@@ -96,7 +103,7 @@ map("v", "<leader>h", "<cmd>lua require'hop'.hint_words()<cr>")
 -- telescope
 local actions = require "telescope.actions"
 local sorters = require "telescope.sorters"
-map('n', '<leader><leader>', "<cmd>Telescope find_files<cr>")
+map('n', '<leader><leader>', "<cmd>Telescope git_files<cr>")
 map('n', '<leader>a', "<cmd>Telescope buffers<cr>")
 map('n', '<leader>fg', "<cmd>Telescope live_grep<cr>")
 map('n', '<leader>fc', "<cmd>Telescope commands<cr>")
@@ -219,6 +226,7 @@ require("telescope").setup {
     },
   }
 }
+
 -- treesitter
 require'nvim-treesitter.configs'.setup {
   ensure_installed = {
@@ -242,7 +250,6 @@ require'nvim-treesitter.configs'.setup {
     enable = true,
   }
 }
-
 -------------------- OPTIONS -----------------------------
 local indent, width = 2, 80
 opt.clipboard = 'unnamedplus'       -- Yank to system clipboard
@@ -273,7 +280,6 @@ opt.updatetime = 100                -- Delay before swap file is saved
 opt.wildmode = {'list', 'longest'}  -- Command-line completion mode
 opt.wrap = false                    -- Disable line wrap
 cmd 'colorscheme gruvbox'
-
 -------------------- LSP -----------------------------
 local nvim_lsp = require('lspconfig')
 
