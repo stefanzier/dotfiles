@@ -14,6 +14,7 @@ eval "$(/Users/szier/src/idl/idldev-tool/bin/idldev init -)"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 plugins=(
+    nvm
     git
     zsh-autosuggestions
     zsh-syntax-highlighting
@@ -26,3 +27,5 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export NVM_LAZY=1
