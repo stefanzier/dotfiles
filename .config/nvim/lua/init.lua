@@ -290,6 +290,7 @@ opt.updatetime = 100                -- Delay before swap file is saved
 opt.wildmode = {'list', 'longest'}  -- Command-line completion mode
 opt.wrap = false                    -- Disable line wrap
 cmd 'colorscheme gruvbox'
+cmd 'highlight Search guibg=Black guifg=LightGreen'
 -------------------- LSP -----------------------------
 local nvim_lsp = require('lspconfig')
 
