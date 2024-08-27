@@ -303,3 +303,46 @@ cmp.setup({
     end,
   },
 })
+
+-------------------- CUSTOM COMMANDS -----------------------------
+-- Neovim Lua script to copy the import statement of a variable to the clipboard
+vim.api.nvim_exec([[
+  function! CopyImportStatement()
+    " Get the current line and extract the variable name
+    let l:current_line = getline('.')
+    let l:variable_name = matchstr(l:current_line, '\v\C\<(function|const|let|var|class|export)\s+\zs\k+')
+
+    " If no variable name is found, use the word under the cursor
+    if empty(l:variable_name)
+      let l:variable_name = expand('<cword>')
+    endif
+
+    " Get the full file path and convert it to the import path
+    let l:file_path = expand('%:p')
+    let l:project_root = finddir('.git/..', ';')
+    let l:relative_path = substitute(l:file_path, l:project_root, '', '')
+    let l:import_path = substitute(l:relative_path, '^/', '', '')
+    let l:import_path = substitute(l:import_path, '/', '.', 'g')
+    let l:import_path = substitute(l:import_path, '\.\(py\|ts\|js\)$', '', '')
+
+    " Determine the file type and construct the import statement accordingly
+    if &filetype == 'python'
+      let l:import_statement = 'from ' . l:import_path . ' import ' . l:variable_name
+    elseif &filetype == 'typescript' || &filetype == 'javascript'
+      let l:import_path = substitute(l:import_path, '\.', '/', 'g')
+      let l:import_statement = 'import { ' . l:variable_name . ' } from "' . l:import_path . '"'
+    else
+      echo 'Unsupported file type'
+      return
+    endif
+
+    " Copy the import statement to the clipboard
+    call setreg('+', l:import_statement)
+    echo 'Copied: ' . l:import_statement
+  endfunction
+
+  augroup CopyImport
+    autocmd!
+    autocmd FileType python,typescript,javascript nnoremap <buffer> <leader>ci :call CopyImportStatement()<CR>
+  augroup END
+]], false)
