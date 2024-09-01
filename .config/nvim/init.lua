@@ -1,5 +1,5 @@
 -------------------- HELPERS -------------------------------
-local api, cmd, opt, fn, g = vim.api, vim.cmd, vim.opt, vim.fn, vim.g
+local api, cmd, opt, fn, g, keymap = vim.api, vim.cmd, vim.opt, vim.fn, vim.g, vim.keymap
 
 local function map(mode, lhs, rhs, opts)
   local options = {noremap = true}
@@ -13,27 +13,58 @@ map("n", "<leader>j", "<C-W><C-H>", { silent = true })                      -- m
 map("n", "<leader>k", "<C-W><C-L>", { silent = true })                      -- move to right split
 -------------------- PLUGINS -------------------------------
 require('packer').startup(function()
-  use 'APZelos/blamer.nvim'
-  use 'beauwilliams/focus.nvim'                                -- maximizes active split
-  use 'davidgranstrom/nvim-markdown-preview'
-  use 'famiu/nvim-reload'                                      -- reload nvim config completely
-  use 'folke/which-key.nvim'                                   -- key bindings cheatsheet
-  use 'github/copilot.vim'                                     -- github copilot
-  use 'hrsh7th/nvim-compe'                                     -- autocompletion for nvim
-  use 'kyazdani42/nvim-tree.lua'                               -- file explorer
-  use 'mg979/vim-visual-multi'                                 -- sublime-like multi-cursor movement
+  -- Packer can manage itself
+  use 'wbthomason/packer.nvim'
+
+  -- Themes
   use 'morhetz/gruvbox'                                        -- gruvbox theme
   use {'embark-theme/vim', as = 'embark'}                      -- embark theme
-  use {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    requires = {
-      {'neovim/nvim-lspconfig'},
-      {'hrsh7th/nvim-cmp'},
-      {'hrsh7th/cmp-nvim-lsp'},
-      {'L3MON4D3/LuaSnip'},
-    }
+
+  -- File Explorer
+  use 'kyazdani42/nvim-tree.lua'                               -- file explorer
+
+  -- Markdown
+  use 'davidgranstrom/nvim-markdown-preview'
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+  })                                                           -- markdown preview
+
+  -- Git
+  use 'APZelos/blamer.nvim'
+  use 'tpope/vim-fugitive'                                     -- a git wrapper
+  use 'tpope/vim-rhubarb'                                      -- :Gbrowse to open GitHub URLs
+  use { 'sindrets/diffview.nvim', opt = true,
+      cmd = { 'DiffviewOpen', 'DiffviewClose' }}               -- easy git diff viewing
+
+  -- LSP and Autocompletion
+  use 'neovim/nvim-lspconfig'                                  -- LSP configurations
+  use 'williamboman/mason.nvim'                                -- manage external tooling like LSP servers
+  use 'williamboman/mason-lspconfig.nvim'                      -- LSP configurations for mason.nvim
+  use 'hrsh7th/nvim-cmp'                                       -- autocompletion plugin
+  use 'hrsh7th/cmp-nvim-lsp'                                   -- LSP source for nvim-cmp
+  use 'L3MON4D3/LuaSnip'                                       -- snippet engine
+  use 'saadparwaiz1/cmp_luasnip'                               -- luasnip source for nvim-cmp
+  use 'rafamadriz/friendly-snippets'                           -- collection of common snippets
+  use 'github/copilot.vim'                                     -- github copilot
+
+  -- Navigation and Movement
+  use 'beauwilliams/focus.nvim'                                -- maximizes active split
+  use 'mg979/vim-visual-multi'                                 -- sublime-like multi-cursor movement
+  use {                                                        -- jump around buffer(s) faster (like easymotion)
+    'phaazon/hop.nvim',
+    branch = 'v1', -- optional but strongly recommended
   }
+  use 'unblevable/quick-scope'                                 -- highlight characters to jump to in horizontal movements
+
+  -- Syntax Highlighting
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' } -- syntax highlighting
+  use { 'vmware-archive/salt-vim', opt = true,
+      ft = { 'sls' }}                                          -- saltstack syntax highlighting
+
+  -- Utility
+  use 'famiu/nvim-reload'                                      -- reload nvim config completely
+  use 'folke/which-key.nvim'                                   -- key bindings cheatsheet
   use { 'nvim-telescope/telescope.nvim',
         requires = {
             {'nvim-lua/popup.nvim'},
@@ -41,23 +72,14 @@ require('packer').startup(function()
             {'nvim-telescope/telescope-fzy-native.nvim'},
         },
       }                                                        -- fuzzy file finder
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' } -- syntax highlighting
-  use {                                                        -- jump around buffer(s) faster (like easymotion)
-    'phaazon/hop.nvim',
-    branch = 'v1', -- optional but strongly recommended
-  }
-  use { 'sindrets/diffview.nvim', opt = true,
-      cmd = { 'DiffviewOpen', 'DiffviewClose' }}               -- easy git diff viewing
-  use { 'vmware-archive/salt-vim', opt = true,
-      ft = { 'sls' }}                                          -- saltstack syntax highlighting
+
+  -- Comments and Surround
   use 'tpope/vim-commentary'                                   -- toggle comments in various ways
-  use 'tpope/vim-fugitive'                                     -- a git wrapper
-  use 'tpope/vim-repeat'                                       -- to enable "." for plugin maps
-  use 'tpope/vim-rhubarb'                                      -- :Gbrowse to open GitHub URLs
-  use 'tpope/vim-sleuth'                                       -- auto-set 'shiftwidth' + 'expandtab' (indention) based on file type.
   use 'tpope/vim-surround'                                     -- surround text with "'{...}'"
-  use 'unblevable/quick-scope'                                 -- highlight characters to jump to in horizontal movements
-  use 'wbthomason/packer.nvim'                                 -- packer.nvim can manage itself
+
+  -- Miscellaneous
+  use 'tpope/vim-repeat'                                       -- to enable "." for plugin maps
+  use 'tpope/vim-sleuth'                                       -- auto-set 'shiftwidth' + 'expandtab' (indention) based on file type.
 end)
 -------------------- PLUGIN OPTIONS ----------------------
 -- APZelos/blamer.nvim
@@ -79,7 +101,93 @@ require'nvim-tree'.setup {
     },
   }
 }
-map('n', '<leader>n', '<cmd>NvimTreeFindFileToggle<cr>')
+map('n', '<leader>e', '<cmd>NvimTreeFindFileToggle<cr>')
+
+-- iamcco/markdown-preview.nvim
+map('n', '<leader>mp', '<cmd>MarkdownPreviewToggle<cr>')
+
+-- List of language servers with optional custom configurations
+local servers = {
+  gopls = {
+    cmd = {"gopls"},
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    root_dir = require('lspconfig.util').root_pattern("go.work", "go.mod", ".git"),
+    settings = {
+      gopls = {
+        completeUnimported = true,
+        usePlaceholders = true,
+        analyses = {
+          unusedparams = true,
+        },
+      },
+    },
+  },
+  pyright = {},
+  tsserver = {},
+}
+
+-- Setup mason.nvim and mason-lspconfig
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = vim.tbl_keys(servers),
+})
+
+-- Load VSCode-style snippets
+require("luasnip.loaders.from_vscode").lazy_load()
+
+-- Setup nvim-cmp for autocompletion
+local cmp = require('cmp')
+cmp.setup({
+  mapping = cmp.mapping.preset.insert({
+    ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+    ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ["<C-e>"] = cmp.mapping.close(),
+    ["<CR>"] = cmp.mapping.confirm({ select = true }),
+  }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  }, {
+    { name = 'buffer' },
+  }),
+})
+
+-- Define on_attach function for LSP
+local on_attach = function(_, _)
+  local map = vim.api.nvim_set_keymap
+  local opts = { noremap = true, silent = true }
+
+  map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+  map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+  map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+  map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+  map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+  vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, opts)
+end
+
+-- Setup capabilities for nvim-cmp
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+-- Function to setup LSP servers
+local function setup_lsp_servers()
+  local lspconfig = require("lspconfig")
+  for server, config in pairs(servers) do
+    config.on_attach = on_attach
+    config.capabilities = capabilities
+    lspconfig[server].setup(config)
+  end
+end
+
+-- Setup LSP servers
+setup_lsp_servers()
 
 -- phaazon/hop.nvim
 require("hop").setup()
@@ -266,43 +374,6 @@ opt.wildmode = {'list', 'longest'}  -- Command-line completion mode
 opt.wrap = false                    -- Disable line wrap
 cmd 'colorscheme gruvbox'            -- Set colorscheme
 cmd 'highlight Search guibg=Black guifg=LightGreen'
--------------------- LSP -----------------------------
-local lsp_zero = require('lsp-zero')
-
-lsp_zero.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({buffer = bufnr, preserve_mappings = false})
-end)
-
-lsp_zero.setup_servers({'pyright', 'tsserver', 'gopls'})
-
--------------------- AUTOCOMPLETION -----------------------
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
-cmp.setup({
-  mapping = cmp.mapping.preset.insert({
-    -- `Enter` key to confirm completion
-    ['<CR>'] = cmp.mapping.confirm({select = false}),
-
-    -- Ctrl+Space to trigger completion menu
-    ['<C-Space>'] = cmp.mapping.complete(),
-
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-
-    -- Scroll up and down in the completion documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-  }),
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-})
 
 -------------------- CUSTOM COMMANDS -----------------------------
 -- Neovim Lua script to copy the import statement of a variable to the clipboard
